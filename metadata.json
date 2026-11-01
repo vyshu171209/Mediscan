@@ -1,0 +1,6 @@
+{
+  "name": "EcoSync",
+  "description": "Smart Home Energy & Utility Management Dashboard with live appliance control, resource pulse trends, and automated grid optimization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
