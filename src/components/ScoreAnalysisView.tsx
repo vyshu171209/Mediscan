@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ScoreAnalysis } from '../medicalTypes';
+import { InteractiveCalculators } from './InteractiveCalculators';
 
 interface ScoreAnalysisViewProps {
   scoreData: ScoreAnalysis;
@@ -7,6 +8,7 @@ interface ScoreAnalysisViewProps {
 
 export const ScoreAnalysisView: React.FC<ScoreAnalysisViewProps> = ({ scoreData }) => {
   const [filterStatus, setFilterStatus] = useState<'all' | 'abnormal'>('abnormal');
+  const [calculatorView, setCalculatorView] = useState<'interactive' | 'automated'>('interactive');
 
   const {
     overallSeverityScore,
@@ -147,17 +149,44 @@ export const ScoreAnalysisView: React.FC<ScoreAnalysisViewProps> = ({ scoreData 
 
       {/* Standard Clinical Calculators Section */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-emerald-600">calculate</span>
             <h3 className="font-headline text-xl font-bold text-slate-900 dark:text-white">
-              Validated Clinical Calculators
+              Validated Clinical Calculators Suite (5 Calculators)
             </h3>
           </div>
-          <span className="text-xs text-slate-500">Automated derivation from report findings</span>
+
+          <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
+            <button
+              onClick={() => setCalculatorView('interactive')}
+              className={`px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                calculatorView === 'interactive'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <span className="material-symbols-outlined text-sm">tune</span>
+              <span>Live Interactive Sandbox</span>
+            </button>
+            <button
+              onClick={() => setCalculatorView('automated')}
+              className={`px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                calculatorView === 'automated'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <span className="material-symbols-outlined text-sm">assignment_turned_in</span>
+              <span>Report-Derived Values</span>
+            </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {calculatorView === 'interactive' ? (
+          <InteractiveCalculators />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {clinicalScores.map((score, idx) => {
             const isHigh = score.riskCategory === 'High' || score.riskCategory === 'Critical';
             const isIntermediate = score.riskCategory === 'Intermediate' || score.riskCategory === 'Elevated';
@@ -201,6 +230,7 @@ export const ScoreAnalysisView: React.FC<ScoreAnalysisViewProps> = ({ scoreData 
             );
           })}
         </div>
+        )}
       </div>
 
       {/* Biomarker Breakdown & Out-of-Range Radar */}

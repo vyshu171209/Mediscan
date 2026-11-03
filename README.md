@@ -4,24 +4,50 @@
 
 ---
 
-## 🌟 Key Features
+## 🌟 Architecture & Page Navigation
 
-### 1. Multimodal Medical Report Scanner
-- **Document & Image Scanner**: Drag-and-drop or upload photos/scans of lab sheets, blood tests, radiology impressions, and pathology reports (`PNG`, `JPG`, `WEBP`, `PDF`).
-- **Clinical Text & Lab Paste**: Paste raw laboratory readings, discharge summaries, or clinical progress notes.
-- **Patient Context Integration**: Enter optional demographics (Age, Sex), known allergies (e.g., Penicillin, Sulfa), and current home medications to personalize drug selection and detect interactions.
-- **1-Click Verified Sample Reports**:
-  - **Type 2 Diabetes & Diabetic Nephropathy**: HbA1c 9.4%, eGFR 52 mL/min/1.73m², uACR 185 mg/g, mixed dyslipidemia.
-  - **Community-Acquired Pneumonia & Sepsis Watch**: Right lower lobe consolidation, WBC 18.4k with 15% bands, Procalcitonin 2.85 ng/mL, BUN 29 mg/dL.
-  - **Acute Coronary Syndrome (NSTEMI)**: hs-Troponin I 1.42 ng/mL, ischemic ST depressions, LDL 178 mg/dL.
-  - **Advanced Hepatic Fibrosis & Cirrhosis (MASH)**: FIB-4 4.85, AST/ALT > 1, Platelets 98k, Morrison's pouch ascites.
+MediScan is structured with a dedicated **Sidebar Navigation ("Features on One Side")** separating each clinical workflow into independent, focused pages:
 
-### 2. Multi-Dimensional Score Analysis
-- **Composite Severity Index (0–100)**: Visual gauge bar mapping overall clinical severity into risk tiers:
-  - `0–25`: Low Risk / Minimal
-  - `26–50`: Moderate Risk
-  - `51–75`: High Risk
-  - `76–100`: Critical / Emergent
+1. **Dashboard Page (`/dashboard`)**:
+   - Hero visualization banner with MediScan diagnostics imagery.
+   - Project name, system status, and executive clinical KPIs.
+   - Active patient case summary and 1-click clinical benchmark selector.
+   - Direct launch tiles to every feature.
+
+2. **Scan Lab / Scanning Reports Page (`/scan`)**:
+   - Multimodal document dropzone (`PNG`, `JPG`, `WEBP`, `PDF`) and raw clinical text paste.
+   - Patient context inputs (Age, Sex, Allergies, Current Home Medications).
+   - Instant 1-click verified sample case loader.
+
+3. **Scoring Analysis Page (`/scores`)**:
+   - Composite Severity Index (0–100) and risk tiering (`Low`, `Moderate`, `High`, `Critical`).
+   - Urgency timelines and evidence quality score.
+   - Validated clinical risk calculators: **CURB-65**, **ASCVD 10-Year Risk**, **KDIGO Staging**, **TIMI Risk**, and **FIB-4**.
+   - Biomarker Variance Radar & comparative reference interval table.
+
+4. **Predicted Treatment Plan & Doctor Consult Page (`/treatment`)**:
+   - Primary: **Predicted Clinical Treatment Plan** — First-line guideline pharmacotherapy, contraindication warnings, lifestyle directives, and **Plan Based on Patient Advice** (customizing route, budget copay tier, and dietary readiness with dynamic adherence scoring).
+   - Interactive: **Direct Live Doctor Consultation Demo** — Real-time physician video/audio consultation simulation with attending specialist Dr. Sarah Chen, MD, FACC, live audio waveform, and second-opinion prescription signoff.
+
+5. **Clinical Decision Support Q&A Page (`/qa`)**:
+   - Interactive consultation chat grounded in the patient's scanned biomarkers and diagnoses.
+   - Test "what-if" scenarios, drug-allergy contraindications, and guideline dosage adjustments.
+
+6. **End-of-Treatment Feedback Console (`/feedback`)**:
+   - Conclusive page at the end of the clinical treatment workflow.
+   - 5-Star Protocol Quality and Therapeutic Efficacy ratings.
+   - Patient tolerability selection and adherence compliance slider (20%–100%).
+   - Symptom improvement verification and physician/patient notes.
+   - Follow-up clinical recommendation dropdown, synced with printable EHR export summaries.
+
+7. **Thank You Page (`/thankyou`)**:
+   - Dedicated conclusion section.
+   - Designed medical appreciation banner with animated heartbeat pulse.
+   - Clinical trust pillars, quick return actions, and healthcare excellence dedication.
+
+---
+
+## 🌟 Key Features Detail
 - **Urgency & Action Timeline**: Actionable response timeframes (e.g., *Immediate Inpatient Admission*, *Urgent within 3–7 days*, *Routine follow-up*).
 - **Diagnostic Confidence Score**: Percentage evaluation of clinical concordance across findings.
 - **Validated Clinical Calculators**:
@@ -32,18 +58,30 @@
   - **FIB-4 & Child-Pugh Score**: Non-invasive liver fibrosis staging and hepatic synthetic function reserve.
 - **Biomarker Variance Radar**: Table comparing detected values against reference intervals with status indicators (`Critical High`, `High`, `Low`, `Normal`) and clinical pathophysiology.
 
-### 3. Evidence-Based Treatment Prediction
-- **First-Line Pharmacotherapy Cards**:
-  - Generic and trade drug names.
-  - Pharmacological drug classes.
-  - Target starting dosages, titration schedules, frequencies, and routes.
-  - Specific mechanisms of action.
-  - International clinical practice citations (**ADA 2024**, **ACC/AHA 2023**, **ATS/IDSA**, **KDIGO**, **AASLD**).
-  - One-click prescription details copying.
+### 3. Evidence-Based Treatment Prediction & Live Simulation
+- **Live Treatment Demo & Simulation Mode**:
+  - Interactive 4-phase clinical pathway:
+    - *Phase 1 (Day 1)*: Acute initiation, baseline vitals, and safety checks.
+    - *Phase 2 (Days 7–14)*: Early tolerability, BMP renal monitoring, and symptom reduction.
+    - *Phase 3 (Month 1)*: Dose titration to full guideline steady state.
+    - *Phase 4 (Month 3)*: Target biomarker attainment (HbA1c < 7.0%, LDL target) and long-term surveillance.
+  - Interactive controls: Auto-play journey, phase stepping, simulated biomarker trajectories, and live patient scenario testing (optimal, nausea, blood pressure rebound).
+- **Patient-Tailored Plan Customization (Based on Patient Advice)**:
+  - Customizes regimens based on patient lifestyle, advice, and financial capacity:
+    - *Administration route*: Oral pills only vs. injectables permitted.
+    - *Budget / Tier*: Low-copay generics vs. comprehensive guideline combinations.
+    - *Dietary readiness*: Strict DASH vs. moderate gradual shifts.
+    - *Monitoring modality*: Home continuous sensors vs. clinic visits.
+  - Dynamically calculates a personalized **Adherence Probability Index**.
+- **First-Line Pharmacotherapy Cards**: Generic/trade names, drug classes, target starting dosages, titration schedules, frequencies, routes, mechanisms of action, and international clinical practice citations (**ADA 2024**, **ACC/AHA 2023**, **ATS/IDSA**, **KDIGO**, **AASLD**).
 - **Contraindications & Toxicity Alerts**: Flags dangerous medications contraindicated by the patient's specific lab values (e.g., NSAIDs in renal failure/cirrhosis, metformin eGFR limits, nitrates with PDE-5 inhibitors).
-- **Lifestyle & Nutritional Prescriptions**: Sodium limits, carbohydrate guidelines, aerobic targets, and dietary patterns (DASH, Mediterranean).
-- **Monitoring Schedule**: Structured follow-up lab re-check timetable (14 days, 30 days, 90 days).
-- **Emergency Red Flags**: Critical warning triggers requiring immediate 911 / Emergency Room presentation.
+- **End-of-Treatment Clinical Feedback Console**:
+  - Star ratings for overall plan and clinical effectiveness.
+  - Tolerance status recording (Well Tolerated, Mild Side Effects, Moderate Intolerance, Dose Modification Needed).
+  - Adherence compliance percentage slider.
+  - Symptom improvement validation.
+  - Clinician and patient direct feedback logs with follow-up action recommendations.
+  - Inclusion in printable and exported medical records.
 
 ### 4. Interactive Clinical Decision Support
 - **Dual View Modes**:
@@ -188,12 +226,14 @@ Answers follow-up clinical decision support questions and evaluates drug allergy
     ├── medicalTypes.ts              # Diagnostic, Score, and Treatment interfaces
     ├── medicalSampleData.ts         # Verified benchmark clinical reports
     └── components/
-        ├── MedicalHeader.tsx        # Top bar with view toggles & actions
-        ├── ScannerInput.tsx         # Document dropzone, OCR preview & text entry
-        ├── ScoreAnalysisView.tsx    # Severity gauge, clinical calculators & biomarkers
-        ├── TreatmentPlanView.tsx    # Medications, contraindications & lifestyle
-        ├── ClinicalQAChat.tsx       # Grounded clinical decision support Q&A
-        └── MedicalModals.tsx        # Disclaimer and export/print modals
+        ├── MedicalHeader.tsx            # Top bar with view toggles & actions
+        ├── ScannerInput.tsx             # Document dropzone, OCR preview & text entry
+        ├── ScoreAnalysisView.tsx        # Severity gauge, clinical calculators & biomarkers
+        ├── TreatmentPlanView.tsx        # Standard guideline protocol & patient advice customization
+        ├── LiveDemoSection.tsx          # 4-phase interactive patient simulation engine & scenario testing
+        ├── ClinicalQAChat.tsx           # Grounded clinical decision support Q&A
+        ├── TreatmentFeedbackSection.tsx # End-of-treatment clinical outcome & feedback console
+        └── MedicalModals.tsx            # Disclaimer and export/print modals
 ```
 
 ---

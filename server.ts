@@ -207,16 +207,29 @@ ${clinicalNotes ? `Patient Background / Clinical Context:\n${clinicalNotes}\n` :
 
     contents.push({ text: promptText });
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
-      contents: contents.length === 1 ? contents[0].text : { parts: contents },
-      config: {
-        systemInstruction:
-          'You are an authoritative, evidence-based medical diagnostics and clinical decision support system. Provide rigorous, precise medical analysis with accurate dosages, ICD codes, and clinical guidelines. Always prioritize patient safety and detect contraindications.',
-        responseMimeType: 'application/json',
-        responseSchema: medicalAnalysisSchema,
-      },
-    });
+    const contentsPayload = contents.length === 1 ? contents[0].text : { parts: contents };
+    const requestConfig = {
+      systemInstruction:
+        'You are an authoritative, evidence-based medical diagnostics and clinical decision support system. Provide rigorous, precise medical analysis with accurate dosages, ICD codes, and clinical guidelines. Always prioritize patient safety and detect contraindications.',
+      responseMimeType: 'application/json',
+      responseSchema: medicalAnalysisSchema,
+    };
+
+    let response;
+    try {
+      response = await ai.models.generateContent({
+        model: 'gemini-3.8-flash',
+        contents: contentsPayload,
+        config: requestConfig,
+      });
+    } catch (primaryErr: any) {
+      console.warn('Primary model busy, falling back to fast model:', primaryErr?.message || primaryErr);
+      response = await ai.models.generateContent({
+        model: 'gemini-flash-latest',
+        contents: contentsPayload,
+        config: requestConfig,
+      });
+    }
 
     const rawJson = response.text || '{}';
     const parsedData = JSON.parse(rawJson);
@@ -224,9 +237,15 @@ ${clinicalNotes ? `Patient Background / Clinical Context:\n${clinicalNotes}\n` :
     res.json({ success: true, data: parsedData });
   } catch (error: any) {
     console.error('Error scanning medical report:', error);
-    res.status(500).json({
-      error: error.message || 'Failed to scan and predict treatment for the report.',
-    });
+    let errorMsg = 'Failed to scan and predict treatment for the report. Please try again.';
+    if (error?.message) {
+      if (error.message.includes('503') || error.message.includes('high demand') || error.message.includes('ResourceExhausted') || error.message.includes('429')) {
+        errorMsg = 'The clinical analysis service is temporarily busy due to high network demand. Please retry in a few moments.';
+      } else if (error.message.includes('API_KEY')) {
+        errorMsg = 'Clinical analysis service is not properly configured.';
+      }
+    }
+    res.status(500).json({ error: errorMsg });
   }
 });
 
@@ -262,19 +281,35 @@ Provide an authoritative, evidence-based clinical answer:
 - Specific guideline citations (ACC/AHA, ADA, KDIGO, etc.)
 `;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
-      contents: prompt,
-      config: {
-        systemInstruction:
-          'You are a senior clinical pharmacologist and medical specialist providing decision support on medical reports and treatment adjustments.',
-      },
-    });
+    const requestConfig = {
+      systemInstruction:
+        'You are a senior clinical pharmacologist and medical specialist providing decision support on medical reports and treatment adjustments.',
+    };
+
+    let response;
+    try {
+      response = await ai.models.generateContent({
+        model: 'gemini-3.8-flash',
+        contents: prompt,
+        config: requestConfig,
+      });
+    } catch (primaryErr: any) {
+      console.warn('Primary model busy for QA, falling back to fast model:', primaryErr?.message || primaryErr);
+      response = await ai.models.generateContent({
+        model: 'gemini-flash-latest',
+        contents: prompt,
+        config: requestConfig,
+      });
+    }
 
     res.json({ success: true, answer: response.text });
   } catch (error: any) {
     console.error('Error answering clinical question:', error);
-    res.status(500).json({ error: error.message || 'Failed to answer clinical query.' });
+    let errorMsg = 'Failed to answer clinical query. Please try again.';
+    if (error?.message && (error.message.includes('503') || error.message.includes('high demand') || error.message.includes('429'))) {
+      errorMsg = 'The clinical advisory service is temporarily experiencing high demand. Please try again shortly.';
+    }
+    res.status(500).json({ error: errorMsg });
   }
 });
 

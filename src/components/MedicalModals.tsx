@@ -118,6 +118,21 @@ ${analysis.treatmentPlan.monitoringSchedule.map((m) => `- ${m}`).join('\n')}
 
 EMERGENCY RED FLAGS:
 ${analysis.treatmentPlan.emergencyRedFlags.map((e) => `[!] ${e}`).join('\n')}
+${
+  analysis.feedback
+    ? `
+5. TREATMENT OUTCOME & FEEDBACK:
+- Recorded: ${analysis.feedback.submittedAt}
+- Overall Plan Rating: ${analysis.feedback.overallRating}/5
+- Effectiveness Rating: ${analysis.feedback.effectivenessRating}/5
+- Tolerability Status: ${analysis.feedback.toleranceStatus}
+- Adherence Rate: ${analysis.feedback.adherencePercentage}%
+- Symptoms Improvement: ${analysis.feedback.symptomsImproved ? 'Yes' : 'Pending'}
+- Clinical Recommendation: ${analysis.feedback.recommendedFollowUpAction}
+- Clinician Comments: ${analysis.feedback.clinicianComments}
+- Patient Notes: ${analysis.feedback.patientComments}`
+    : ''
+}
 =====================================================`;
   };
 

@@ -1,6 +1,6 @@
 {
   "name": "EcoSync",
-  "description": "Smart Home Energy & Utility Management Dashboard with live appliance control, resource pulse trends, and automated grid optimization.",
+  "description": "Medical Report Scanner & Treatment Predictor with interactive Doctor Live Demo, comprehensive clinical score analysis, and patient experience feedback system.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

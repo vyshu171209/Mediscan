@@ -54,6 +54,42 @@ export interface TreatmentPlan {
   emergencyRedFlags: string[];
 }
 
+export interface TreatmentFeedback {
+  id: string;
+  submittedAt: string;
+  overallRating: number; // 1-5
+  effectivenessRating: number; // 1-5
+  toleranceStatus: 'Well Tolerated' | 'Mild Side Effects' | 'Moderate Intolerance' | 'Dose Modification Needed';
+  adherencePercentage: number;
+  symptomsImproved: boolean;
+  clinicianComments: string;
+  patientComments: string;
+  recommendedFollowUpAction: string;
+}
+
+export interface PatientPreferences {
+  preferredRoute: 'oral_only' | 'injectable_ok' | 'any';
+  costBudget: 'standard_generic' | 'value_optimized' | 'premium_comprehensive';
+  dietaryCapacity: 'strict_dash' | 'moderate_balanced' | 'lifestyle_coached';
+  activityLevel: 'sedentary' | 'moderate_walk' | 'vigorous';
+  monitoringMethod: 'home_digital_cgm' | 'clinic_visits_only';
+}
+
+export interface TreatmentTimelineStep {
+  phase: string;
+  timeframe: string;
+  title: string;
+  status: 'pending' | 'in_progress' | 'completed';
+  actions: string[];
+  expectedBiomarkerChange: {
+    marker: string;
+    before: string;
+    target: string;
+  }[];
+  clinicalGoal: string;
+  riskAlert?: string;
+}
+
 export interface MedicalReportAnalysis {
   reportType: string;
   patientProfile: PatientProfile;
@@ -62,6 +98,7 @@ export interface MedicalReportAnalysis {
   treatmentPlan: TreatmentPlan;
   patientFriendlySummary: string;
   timestamp?: string;
+  feedback?: TreatmentFeedback;
 }
 
 export interface SampleReportOption {
